@@ -17,6 +17,7 @@ const openai = new OpenAI({
 });
 
 router.post('/send', upload, async (req, res) => {
+  console.log('Arquivo recebido:', req.file.originalname);
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'Nenhuma imagem enviada' });
@@ -41,6 +42,9 @@ router.post('/send', upload, async (req, res) => {
     });
 
     fs.unlinkSync(req.file.path);
+
+    console.log('Texto extraído:', text);
+    console.log('Resposta da API:', response.choices[0].message.content);
 
     res.json({
       answer: cleanText(response.choices[0].message.content),

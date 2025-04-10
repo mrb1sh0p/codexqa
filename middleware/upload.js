@@ -1,6 +1,8 @@
 import multer from 'multer';
 
 const upload = (req, res, next) => {
+  console.log('Iniciando o upload da imagem...');
+
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './uploads');
@@ -14,6 +16,7 @@ const upload = (req, res, next) => {
 
   upload(req, res, (err) => {
     if (err) {
+      console.log('Erro no upload:', err);
       return res.status(400).json({ error: 'Falha no upload da imagem' });
     }
 
