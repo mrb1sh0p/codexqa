@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import multer from '../utils/multer.js';
+import multer from '../middleware/multer.js';
 import { ocrController } from '../controllers/ocr.controller.js';
 const router = Router();
 

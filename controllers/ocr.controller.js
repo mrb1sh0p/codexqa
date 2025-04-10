@@ -1,5 +1,6 @@
 import { createWorker } from 'tesseract.js';
 import fs from 'fs';
+import { cleanText } from '../utils/cleanText.js';
 
 export const ocrController = async (req, res) => {
   if (!req.file) {
@@ -13,7 +14,9 @@ export const ocrController = async (req, res) => {
       data: { text },
     } = await worker.recognize(req.file.path);
 
-    res.json({ text });
+    const result = cleanText(text);
+
+    res.json({ result });
   } catch (error) {
     console.error('OCR error:', error);
     res.status(500).json({ error: 'Error processing image' });
