@@ -16,7 +16,7 @@ const uploadToS3 = (req, res, next) => {
 
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
-    Key: req.file.originalname,
+    Key: req.file.originalname + Date.now(),
     Body: req.file.buffer,
     ContentType: req.file.mimetype,
   };

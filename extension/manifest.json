@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Responder Questão",
+  "name": "question.ai",
   "version": "1.0",
   "description": "Captura uma pergunta da tela e envia para análise.",
   "permissions": ["contextMenus", "tabs", "activeTab", "scripting"],

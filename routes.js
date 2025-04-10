@@ -42,6 +42,8 @@ router.post('/send', upload, uploadToS3, async (req, res) => {
       5. Caso tenha letras na alternativa, reposta ela antes de qualquer coisa
       6. Evite explicar o motivo da resposta
       7. Responda em texto cru, sem caracteres especiais ou formatação
+      8. Para ser que é um responda, sem coloque "R:" antes da resposta
+      9. Não use emojis ou caracteres especiais
     `;
 
     const response = await openai.chat.completions.create({
