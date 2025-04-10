@@ -97,9 +97,20 @@ function showToast(message) {
 
   document.body.appendChild(toast);
 
+  const existingToast = document.querySelector('.toast');
+  if (existingToast) {
+    existingToast.remove();
+  }
+
+  toast.classList.add('toast');
+  toast.style.opacity = '1';
+
   setTimeout(() => {
-    toast.style.opacity = '1';
-  }, 100);
+    toast.style.opacity = '0';
+    setTimeout(() => {
+      toast.remove();
+    }, 500);
+  }, 30000);
 
   setTimeout(() => {
     toast.style.opacity = '0';
