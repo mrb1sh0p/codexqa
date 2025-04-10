@@ -111,11 +111,4 @@ function showToast(message) {
       toast.remove();
     }, 500);
   }, 30000);
-
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    setTimeout(() => {
-      toast.remove();
-    }, 500);
-  }, 3000);
 }
