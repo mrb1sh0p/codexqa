@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './router/ocr.routes.js';
+import router from './routes.js';
 
 const app = express();
 
