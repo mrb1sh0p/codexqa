@@ -2,7 +2,7 @@ import { Router } from 'express';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import Tesseract from 'tesseract.js';
-import sharp from 'sharp'; // Adicione esta linha
+import sharp from 'sharp';
 import fs from 'fs';
 
 import upload from './middleware/upload.js';
