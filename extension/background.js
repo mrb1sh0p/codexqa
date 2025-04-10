@@ -6,6 +6,12 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.action === 'displayAnswer') {
+    showToast(msg.answer);
+  }
+});
+
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === 'sendScreenshot' && tab.id) {
     try {
@@ -70,4 +76,34 @@ function dataURLtoBlob(dataURL) {
     ia[i] = byteString.charCodeAt(i);
   }
   return new Blob([ab], { type: mimeString });
+}
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.innerText = message;
+  toast.style.position = 'fixed';
+  toast.style.bottom = '20px';
+  toast.style.right = '20px';
+  toast.style.padding = '10px 20px';
+  toast.style.backgroundColor = 'rgba(0,0,0,0.8)';
+  toast.style.color = '#fff';
+  toast.style.fontSize = '14px';
+  toast.style.borderRadius = '5px';
+  toast.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+  toast.style.zIndex = '10000';
+  toast.style.opacity = '0';
+  toast.style.transition = 'opacity 0.5s ease';
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '1';
+  }, 100);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => {
+      toast.remove();
+    }, 500);
+  }, 3000);
 }
