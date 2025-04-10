@@ -53,6 +53,8 @@ router.post('/send', upload, uploadToS3, async (req, res) => {
 
     const rawAnswer = cleanText(response.choices[0].message.content);
 
+    console.log('Resposta da IA:', rawAnswer);
+
     res.json({
       answer: rawAnswer,
       extractedText: text,

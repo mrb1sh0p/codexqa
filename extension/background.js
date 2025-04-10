@@ -14,6 +14,7 @@ chrome.runtime.onMessage.addListener((msg) => {
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === 'sendScreenshot' && tab.id) {
+    console.log('Capturando a tela...');
     try {
       await chrome.scripting.executeScript({
         target: { tabId: tab.id },

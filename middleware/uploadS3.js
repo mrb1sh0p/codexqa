@@ -11,6 +11,8 @@ const s3 = new S3Client({
 });
 
 const uploadToS3 = (req, res, next) => {
+  console.log('Iniciando upload para o S3...');
+
   if (!req.file)
     return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
 
