@@ -2,10 +2,9 @@ import { Router } from 'express';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import Tesseract from 'tesseract.js';
-import sharp from 'sharp';
-import fs from 'fs';
 
 import upload from './middleware/upload.js';
+import uploadToS3 from './middleware/uploadS3.js';
 import { cleanText } from './utils/cleanText.js';
 
 dotenv.config();
@@ -17,29 +16,15 @@ const openai = new OpenAI({
   apiKey: process.env.DEEPSEEK_API_KEY,
 });
 
-// Função de pré-processamento de imagem
-const preprocessImage = async (imagePath) => {
-  await sharp(imagePath)
-    .greyscale() // Converter para escala de cinza
-    .linear(1.2, -50) // Aumentar contraste e brilho
-    .blur(0.5) // Reduzir ruído
-    .toFile(`${imagePath}_processed.png`);
-
-  return `${imagePath}_processed.png`;
-};
-
-router.post('/send', upload, async (req, res) => {
+router.post('/send', upload, uploadToS3, async (req, res) => {
   try {
     if (!req.file)
       return res.status(400).json({ error: 'Nenhuma imagem enviada' });
 
-    // Pré-processar a imagem
-    const processedPath = await preprocessImage(req.file.path);
-
     // OCR com configurações otimizadas
     const {
       data: { text },
-    } = await Tesseract.recognize(processedPath, 'por+eng', {
+    } = await Tesseract.recognize(req.file.path, 'por+eng', {
       tessedit_pageseg_mode: 6, // Modo de detecção de fórmula
       tessedit_char_whitelist:
         'ABCDE0123456789(),-.{}[]<>/=+*áéíóúâêîôûàèìòùãõç',
@@ -66,19 +51,15 @@ router.post('/send', upload, async (req, res) => {
 
     const rawAnswer = cleanText(response.choices[0].message.content);
 
-    [req.file.path, processedPath].forEach(
-      (path) => fs.existsSync(path) && fs.unlinkSync(path)
-    );
-
     res.json({
       answer: rawAnswer,
       extractedText: text,
     });
   } catch (error) {
     console.error('Erro:', error);
-    res
-      .status(500)
-      .json({ error: 'Falha no processamento. Envie uma imagem mais nítida.' });
+    res.status(500).json({
+      error: 'Falha no processamento. Envie uma imagem mais nítida.',
+    });
   }
 });
 

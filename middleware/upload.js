@@ -1,17 +1,13 @@
 import multer from 'multer';
 
 const upload = (req, res, next) => {
-  console.log('Iniciando o upload da imagem...');
-
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, './uploads');
-    },
+  const storage = multer.memoryStorage({
     filename: (req, file, cb) => {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
       cb(null, uniqueSuffix + '-' + file.originalname);
     },
   });
+
   const upload = multer({ storage }).single('image');
 
   upload(req, res, (err) => {
