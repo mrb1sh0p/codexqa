@@ -33,7 +33,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
       const formData = new FormData();
       formData.append('image', blob, 'screenshot.png');
 
-      const response = await fetch('http://localhost:3000/send', {
+      const response = await fetch('https://codexqa.onrender.com/send', {
         method: 'POST',
         body: formData,
       });
