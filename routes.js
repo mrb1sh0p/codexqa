@@ -17,6 +17,10 @@ const openai = new OpenAI({
 });
 
 router.post('/send', upload, uploadToS3, async (req, res) => {
+  console.log('Iniciando o processamento da imagem...');
+  console.log('Imagem recebida:', req.file.originalname);
+  console.log('URL da imagem recebida:', req.file.path);
+
   try {
     if (!req.file)
       return res.status(400).json({ error: 'Nenhuma imagem enviada' });
