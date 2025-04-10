@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "codex.qa",
+  "name": "codeqa",
   "version": "1.0",
   "description": "Captura uma pergunta da tela e envia para análise.",
   "permissions": ["contextMenus", "tabs", "activeTab", "scripting"],
