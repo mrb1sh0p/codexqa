@@ -1,5 +1,5 @@
-// const ApiEndpoin = 'https://codexqa.onrender.com/send'
-const ApiEndpoin = 'http://localhost:3000/send';
+const ApiEndpoin = 'https://codexqa.onrender.com/send'
+// const ApiEndpoin = 'http://localhost:3000/send';
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
