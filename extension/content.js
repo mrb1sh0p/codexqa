@@ -1,5 +1,6 @@
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === 'displayAnswer') {
+    console.log('Exibindo resposta:', msg.answer);
     showPopup(msg.answer);
   } else if (msg.action === 'startSelection') {
     startSelection(sendResponse);
@@ -124,7 +125,7 @@ function startSelection(sendResponse) {
 }
 
 function showPopup(answer) {
-  console.log('Exibindo popup com a resposta:', answer);
+  console.log('Exibindo popup com a resposta');
   const existingPopup = document.getElementById('custom-popup');
   if (existingPopup) {
     existingPopup.remove();
@@ -168,7 +169,7 @@ function showPopup(answer) {
   `;
 
   const closeBtn = document.createElement('button');
-  closeBtn.textContent = '×';
+  closeBtn.textContent = 'X';
   closeBtn.style.cssText = `
     background: none;
     border: none;

@@ -36,16 +36,17 @@ router.post('/send', upload, uploadToS3, async (req, res) => {
 
     // Prompt otimizado
     const aiPrompt = `
-      RESPONDA ESTE TEXTO RECONHECIDO: "${cleanText(text)}"
+      RESPONDA: "${cleanText(text)}"
 
       REGRAS:
-      1. Identifique a pergunta e alternativas mesmo com erros de OCR
+      1. Identifique a pergunta e, caso tenha, alternativas mesmo com erros de OCR
       2. Corrija notações matemáticas (ex: "(2/3)" → "\\frac{2}{3}")
       3. Caso indeterminável, retorne "Erro - Tente novamente"
       4. Caso tenha letras na alternativa, reposta ela antes de qualquer coisa
       5. Evite explicar o motivo da resposta
-      6. Não responta texto muito longos, tente sempre resumir
+      6. Não responta texto muito longos, tente sempre resumir a resposta
       7. Não use formatação de código ou markdown
+      8. Não volte a pergunta
     `;
 
     const response = await openai.chat.completions.create({
