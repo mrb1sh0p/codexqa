@@ -41,13 +41,11 @@ router.post('/send', upload, uploadToS3, async (req, res) => {
       REGRAS:
       1. Identifique a pergunta e alternativas mesmo com erros de OCR
       2. Corrija notações matemáticas (ex: "(2/3)" → "\\frac{2}{3}")
-      3. Responda SOMENTE à alternativa correta
-      4. Caso indeterminável, retorne "Erro"
-      5. Caso tenha letras na alternativa, reposta ela antes de qualquer coisa
-      6. Evite explicar o motivo da resposta
-      7. Responda em texto cru, sem caracteres especiais ou formatação
-      8. Para ser que é um responda, sem coloque "R:" antes da resposta
-      9. Não use emojis ou caracteres especiais
+      3. Caso indeterminável, retorne "Erro - Tente novamente"
+      4. Caso tenha letras na alternativa, reposta ela antes de qualquer coisa
+      5. Evite explicar o motivo da resposta
+      6. Não responta texto muito longos, tente sempre resumir
+      7. Não use formatação de código ou markdown
     `;
 
     const response = await openai.chat.completions.create({

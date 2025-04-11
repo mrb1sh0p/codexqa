@@ -124,36 +124,158 @@ function startSelection(sendResponse) {
 }
 
 function showPopup(answer) {
+  console.log('Exibindo popup com a resposta:', answer);
   const existingPopup = document.getElementById('custom-popup');
   if (existingPopup) {
     existingPopup.remove();
   }
 
   const popup = document.createElement('div');
-  popup.innerText = answer;
   popup.id = 'custom-popup';
   popup.style.cssText = `
-    display: block;
     position: fixed;
-    top: 25%;
-    left: 10%;
+    top: 15%;
+    left: 20%;
     transform: translate(-50%, -50%);
-    padding: 12px 16px;
+    width: 400px;
+    max-width: 90%;
     background: #2d2d2d;
     color: white;
     border-radius: 8px;
     z-index: 100000;
-    font-family: Arial;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    max-width: 300px;
-    font-size: 14px;
-    line-height: 1.4;
-    cursor: pointer;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   `;
 
-  popup.addEventListener('click', () => {
-    popup.style.display = 'none';
-  });
+  const header = document.createElement('div');
+  header.style.cssText = `
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    cursor: move;
+  `;
 
+  const title = document.createElement('span');
+  title.textContent = 'Resposta';
+  title.style.cssText = `
+    font-weight: bold;
+    color: #fff;
+  `;
+
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '×';
+  closeBtn.style.cssText = `
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 6px;
+  `;
+  closeBtn.onclick = () => popup.remove();
+
+  header.appendChild(title);
+  header.appendChild(closeBtn);
+
+  const textArea = document.createElement('textarea');
+  textArea.value = answer;
+  textArea.style.cssText = `
+    width: 100%;
+    min-height: 150px;
+    padding: 12px;
+    background: #2d2d2d;
+    color: white;
+    border: none;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    outline: none;
+  `;
+  textArea.readOnly = true;
+
+  const toolbar = document.createElement('div');
+  toolbar.style.cssText = `
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    gap: 8px;
+  `;
+
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = 'Copiar';
+  copyBtn.style.cssText = `
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+  `;
+  copyBtn.onmouseover = () => (copyBtn.style.background = '#45a049');
+  copyBtn.onmouseout = () => (copyBtn.style.background = '#4CAF50');
+  copyBtn.onclick = () => {
+    textArea.select();
+    document.execCommand('copy');
+
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = 'Copiado!';
+    copyBtn.style.background = '#45a049';
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+      copyBtn.style.background = '#4CAF50';
+    }, 2000);
+  };
+
+  toolbar.appendChild(copyBtn);
+
+  popup.appendChild(header);
+  popup.appendChild(textArea);
+  popup.appendChild(toolbar);
   document.body.appendChild(popup);
+
+  makeDraggable(popup, header);
+}
+
+function makeDraggable(element, handle) {
+  let pos1 = 0,
+    pos2 = 0,
+    pos3 = 0,
+    pos4 = 0;
+
+  handle.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    element.style.top = element.offsetTop - pos2 + 'px';
+    element.style.left = element.offsetLeft - pos1 + 'px';
+    element.style.transform = 'none';
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
 }
