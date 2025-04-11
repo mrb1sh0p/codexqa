@@ -1,5 +1,3 @@
-let isShowPopup = false;
-
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === 'displayAnswer') {
     showPopup(msg.answer);
@@ -126,10 +124,16 @@ function startSelection(sendResponse) {
 }
 
 function showPopup(answer) {
-  isShowPopup = !isShowPopup;
+  const existingPopup = document.getElementById('custom-popup');
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
   const popup = document.createElement('div');
   popup.innerText = answer;
+  popup.id = 'custom-popup';
   popup.style.cssText = `
+    display: block;
     position: fixed;
     top: 25%;
     left: 10%;
@@ -144,9 +148,12 @@ function showPopup(answer) {
     max-width: 300px;
     font-size: 14px;
     line-height: 1.4;
+    cursor: pointer;
   `;
-  popup.style.display = isShowPopup ? 'none' : 'block';
+
+  popup.addEventListener('click', () => {
+    popup.style.display = 'none';
+  });
 
   document.body.appendChild(popup);
-  setTimeout(() => popup.remove(), 60000);
 }

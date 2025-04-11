@@ -1,3 +1,6 @@
+// const ApiEndpoin = 'https://codexqa.onrender.com/send'
+const ApiEndpoin = 'http://localhost:3000/send';
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'sendScreenshot',
@@ -50,7 +53,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
           });
           console.log('Processando imagem...');
 
-          const response = await fetch('https://codexqa.onrender.com/send', {
+          const response = await fetch(ApiEndpoin, {
             method: 'POST',
             body: formData,
           });
